@@ -1,0 +1,17 @@
+{
+    "name": "pmvc-plugin/http_auth",
+    "description": "http auth helper",
+    "type": "library",
+    "keywords": ["auth", "pmvc", "plug-in"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hill",
+            "email": "hill@kimo.com"
+        }
+    ],
+    "require": {
+        "pmvc/pmvc": "*"
+    },
+    "minimum-stability": "dev"
+}
