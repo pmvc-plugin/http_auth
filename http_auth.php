@@ -9,28 +9,53 @@ class http_auth extends \PMVC\PlugIn
 {
     public function init()
     {
+        $this->auth();
+    }
+
+    public function auth()
+    {
+        $env = \PMVC\plug('getenv');
+        $authUser = $env->get('PHP_AUTH_USER');
+        $authPass = $env->get('PHP_AUTH_PW');
+        if (empty($authUser) && empty($authPass)) {
+            $this->header();
+            echo $this->getTip();
+            exit();
+        }
+        if ($this['user'] && $this['pass']) {
+            if (
+                0 === strcmp((string)$this['user'], (string)$authUser) &&
+                0 === strcmp((string)$this['pass'], (string)$authPass)
+            ) {
+                return true;
+            }
+        }
         $this->block();
+    }
+
+    public function header()
+    {
+        $headers = [
+            'WWW-Authenticate: Basic realm="'.$this->getTip().'"',
+            'HTTP/1.0 401 Unauthorized'
+        ];
+        foreach ($headers as $h) {
+            header($h);
+        }
     }
 
     public function block()
     {
-        header('WWW-Authenticate: Basic realm="'.$this->getTip().'"');
-        header('HTTP/1.0 401 Unauthorized');
-         
-        if (!is_null($this['callBack'])) {
-            return call_user_func_array(
-                $this['callBack'],
-                array()
+        $this->header();
+        if (!is_null($this['callback'])) {
+            return call_user_func(
+                $this['callback']
             );
         }
-        $view = \PMVC\plug('view');
-        $view->setThemeFolder(
-            \PMVC\getOption(_TEMPLATE_DIR)
-        );
-        $view->setThemePath('forbidden');
-        $view->process();
+        trigger_error(1008, E_USER_ERROR);
         exit();
     }
+
 
     public function getTip()
     {
