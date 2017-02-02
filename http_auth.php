@@ -7,11 +7,6 @@ ${_INIT_CONFIG}[_CLASS] = __NAMESPACE__.'\http_auth';
 
 class http_auth extends \PMVC\PlugIn
 {
-    public function init()
-    {
-        $this->auth();
-    }
-
     public function auth()
     {
         $env = \PMVC\plug('getenv');
