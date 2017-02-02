@@ -47,7 +47,7 @@ class http_auth extends \PMVC\PlugIn
                 $this['callback']
             );
         }
-        trigger_error(1008, E_USER_ERROR);
+        trigger_error(403, E_USER_ERROR);
         exit();
     }
 
